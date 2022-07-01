@@ -1,17 +1,17 @@
-import store from "./store";
-import { bugAdded, bugResolved } from './actionsCreators';
+import configStore from "./store/configureStore";
+import { bugAdded, bugResolved } from './store/bugs';
 
-const unSubscribe = store.subscribe( () => {
+const store = configStore()
+
+store.subscribe( () => {
   console.log('state change :', store.getState())
 });
 
 
-store.dispatch(bugAdded('bug1'));
-store.dispatch(bugAdded('bug2'));
-store.dispatch(bugAdded('bug3'));
+store.dispatch(bugAdded({ description:'bug1' }));
+store.dispatch(bugAdded({ description:'bug2' }));
+store.dispatch(bugAdded({ description:'bug3' }));
 
-// unSubscribe();
-
-store.dispatch(bugResolved(1)); 
+store.dispatch(bugResolved({id: 1})); 
 
 console.log(store.getState());
