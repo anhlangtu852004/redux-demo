@@ -1,17 +1,19 @@
 import configStore from "./store/configureStore";
-import { bugAdded, bugResolved } from './store/bugs';
+import { bugAdded } from './store/bugs';
+import { projectAdded } from './store/projects';
 
 const store = configStore()
+
 
 store.subscribe( () => {
   console.log('state change :', store.getState())
 });
 
 
-store.dispatch(bugAdded({ description:'bug1' }));
+store.dispatch(projectAdded({name: 'Project 1'}));
+
 store.dispatch(bugAdded({ description:'bug2' }));
 store.dispatch(bugAdded({ description:'bug3' }));
 
-store.dispatch(bugResolved({id: 1})); 
 
 console.log(store.getState());
