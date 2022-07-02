@@ -10,27 +10,34 @@ store.subscribe( () => {
   console.log('state change :', store.getState())
 });
 
+store.dispatch({
+  type: 'error',
+  payload: {
+    message: 'An error occurred'
+  }
+})
+
 //project
-store.dispatch(projectAdded({name: 'Project 1'}));
+// store.dispatch(projectAdded({name: 'Project 1'}));
 
 //bugs
-store.dispatch(bugAdded({ description:'bug2' }));
-store.dispatch(bugAdded({ description:'bug3' }));
+// store.dispatch(bugAdded({ description:'bug2' }));
+// store.dispatch(bugAdded({ description:'bug3' }));
 
 
 
 //users
-store.dispatch(userAdded({ name: 'user1'}))
-store.dispatch(userAdded({ name: 'user2'}))
+// store.dispatch(userAdded({ name: 'user1'}))
+// store.dispatch(userAdded({ name: 'user2'}))
 
-// add bugs to user
-store.dispatch(bugAssignToUser({ bugId: 1, userId: 1 }));
+// // add bugs to user
+// store.dispatch(bugAssignToUser({ bugId: 1, userId: 1 }));
 
-const XunresolveBugs = getUnresolvedBugs(store.getState())
-const YunresolveBugs = getUnresolvedBugs(store.getState())
+// const XunresolveBugs = getUnresolvedBugs(store.getState())
+// const YunresolveBugs = getUnresolvedBugs(store.getState())
 
-const bugAddUser = getBugAssignToUser(1)(store.getState())
+// const bugAddUser = getBugAssignToUser(1)(store.getState())
 
-console.log(bugAddUser);
-console.log(store.getState());
-console.log(XunresolveBugs  === YunresolveBugs);
+// console.log(bugAddUser);
+// console.log(store.getState());
+// console.log(XunresolveBugs  === YunresolveBugs);
