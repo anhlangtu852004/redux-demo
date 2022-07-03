@@ -1,28 +1,36 @@
 // import { createAction,createReducer } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { createSlice } from '@reduxjs/toolkit';
+import { apiRequestBegan } from './apiAction'
 
 let lastId = 0;
 
 const slice = createSlice({
   name: 'bugs',
-  initialState: [],
+  initialState: {
+    list: [],
+    loading: false,
+    lastFetch: null,
+  },
   reducers: {
+    bugsReceived: (bugs, action) => {
+      bugs.list = action.payload
+    },
     bugAdded: (bugs, action) => {
-      bugs.push ({
+      bugs.list.push ({
         id: ++lastId,
         description: action.payload.description,
         resolve: false
       })
     },
     bugResolved: (bugs,action) => {
-      const index = bugs.findIndex(bug => bug.id === action.payload.id);
-      bugs[index].resolve = true
+      const index = bugs.list.findIndex(bug => bug.id === action.payload.id);
+      bugs.list[index].resolve = true
     },
     bugAssignToUser: (bugs, action) => {
       //bugId , userId
-      const index = bugs.findIndex(bug => bug.id === action.payload.bugId)
-      bugs[index].userId = action.payload.userId
+      const index = bugs.list.findIndex(bug => bug.id === action.payload.bugId)
+      bugs.list[index].userId = action.payload.userId
     }
 
   }
@@ -32,6 +40,18 @@ console.log(slice)
 
 export default slice.reducer;
 export const { bugAdded, bugResolved,bugAssignToUser } =  slice.actions
+
+
+export const loadBugs = () => apiRequestBegan (
+    {
+      url: '/bugs',
+      method: 'get',
+      data:{},
+      onSeccess: 'bugs/bugsReceived',
+      // onError: 'apiResquestFail'
+    }
+  )
+
 
 //createSelector
 // export const getUnresolvedBugs = state => state.entities.bugs.filter( bug => !bug.resolve)
