@@ -16,10 +16,13 @@ const api = ({ dispatch }) => next => action => {
     if( action.type !== actions.apiRequestBegan.type){
         return next(action)
     }
+    
+    
+    const {url, method, data,onStart,onSeccess, onError} = action.payload;
+    if(onStart) {dispatch({type: onStart})}
     next(action);
-    const {url, method, data,onSeccess, onError} = action.payload;
     axios.request({
-        baseURL: 'http://localhost:9001/api',
+        baseURL: 'http://localhost:9002/api',
         url,
         method,
         data,
@@ -36,11 +39,11 @@ const api = ({ dispatch }) => next => action => {
     })
     .catch((error) => {
         //general
-        dispatch (actions.apiResquestFail(error))
+        dispatch (actions.apiResquestFail(error.message));
         if(onError){
             dispatch({
                 type:onError,
-                payload: error
+                payload: error.message
             })
         }
         
