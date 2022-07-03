@@ -1,7 +1,8 @@
 import configStore from "./store/configureStore";
-import { bugAdded, getUnresolvedBugs,bugAssignToUser, getBugAssignToUser } from './store/bugs';
-import { projectAdded } from './store/projects';
-import { userAdded } from './store/users';
+// import { bugAdded, getUnresolvedBugs,bugAssignToUser, getBugAssignToUser } from './store/bugs';
+// import { projectAdded } from './store/projects';
+// import { userAdded } from './store/users';
+import * as actions from './store/apiAction';
 
 const store = configStore()
 
@@ -10,12 +11,22 @@ store.subscribe( () => {
   console.log('state change :', store.getState())
 });
 
-store.dispatch({
-  type: 'error',
-  payload: {
-    message: 'An error occurred'
-  }
-})
+// store.dispatch({
+//   type: 'error',
+//   payload: {
+//     message: 'An error occurred'
+//   }
+// })
+
+store.dispatch(actions.apiRequestBegan({
+    url: '/bugs',
+    method: 'get',
+    data:{},
+    onSeccess: 'bugsReceived',
+    onError: 'apiResquestFail'
+}))
+
+
 
 //project
 // store.dispatch(projectAdded({name: 'Project 1'}));
