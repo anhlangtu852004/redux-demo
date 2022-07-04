@@ -28,11 +28,7 @@ const slice = createSlice({
 
     },
     bugAdded: (bugs, action) => {
-      bugs.list.push ({
-        id: ++lastId,
-        description: action.payload.description,
-        resolve: false
-      })
+      bugs.list.push (action.payload)
     },
     bugResolved: (bugs,action) => {
       const index = bugs.list.findIndex(bug => bug.id === action.payload.id);
@@ -75,6 +71,15 @@ export const loadBugs = () => (dispatch, getState) => {
     )
   )
 };
+
+export const addBug = () => apiRequestBegan (
+  {
+    url: '/bugs',
+    method: 'post',
+    data:{description: 'a'},
+    onSuccess: bugAdded.type,
+  }
+)
 
 
 
