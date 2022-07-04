@@ -1,0 +1,1 @@
+export const isEvent = number => number % 2 === 0;
