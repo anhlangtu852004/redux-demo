@@ -109,7 +109,7 @@ export const assignBugToUser = (bugId,userId) => apiRequestBegan (
 export const getUnresolvedBugs =  createSelector (
   state => state.entities.bugs.list,
   state => state.entities.projects,
-  (bugs, projects) => bugs.filter (bug => !bug.resolve) 
+  (bugs, projects) => bugs.filter (bug => !bug.resolved) 
 )
 
 export const getBugAssignToUser = userId =>  createSelector (
