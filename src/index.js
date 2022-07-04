@@ -1,10 +1,10 @@
 import configStore from "./store/configureStore";
-// import { bugAdded, getUnresolvedBugs,bugAssignToUser, getBugAssignToUser, loadBugs } from './store/bugs';
+import { bugAdded, getUnresolvedBugs,bugAssignToUser, getBugAssignToUser, loadBugs, resolveBugs,assignBugToUser } from './store/bugs';
 import { projectAdded } from './store/projects';
 import { userAdded } from './store/users';
 import * as actions from './store/apiAction';
 
-import { addBug } from './store/bugs'
+// import { addBug } from './store/bugs'
 
 const store = configStore()
 
@@ -20,10 +20,10 @@ store.subscribe( () => {
 //   }
 // })
 
-// store.dispatch(loadBugs())
-store.dispatch(addBug())
+store.dispatch(loadBugs())
+// store.dispatch(addBug())
 
-// setTimeout(() => store.dispatch(loadBugs()),2000)
+setTimeout(() => store.dispatch(assignBugToUser(1,4)),2000)
 
 
 

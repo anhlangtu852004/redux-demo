@@ -32,12 +32,14 @@ const slice = createSlice({
     },
     bugResolved: (bugs,action) => {
       const index = bugs.list.findIndex(bug => bug.id === action.payload.id);
-      bugs.list[index].resolve = true
+      bugs.list[index].resolved = true
     },
     bugAssignToUser: (bugs, action) => {
       //bugId , userId
-      const index = bugs.list.findIndex(bug => bug.id === action.payload.bugId)
-      bugs.list[index].userId = action.payload.userId
+      console.log(action)
+      const { id:bugId , userId } = action.payload
+      const index = bugs.list.findIndex(bug => bug.id === bugId)
+      bugs.list[index].userId = userId
     }
 
   }
@@ -47,7 +49,7 @@ console.log(slice)
 
 export default slice.reducer;
 export const { bugAdded, bugResolved, bugAssignToUser, bugsReceived, bugsRequested, bugRequestFail } =  slice.actions
-
+const url = '/bugs'
 
 export const loadBugs = () => (dispatch, getState) => {
   const { lastFetch } =  getState().entities.bugs
@@ -61,7 +63,7 @@ export const loadBugs = () => (dispatch, getState) => {
   dispatch(
     apiRequestBegan (
       {
-        url: '/bugs',
+        url,
         method: 'get',
         data:{},
         onSuccess: bugsReceived.type,
@@ -72,12 +74,29 @@ export const loadBugs = () => (dispatch, getState) => {
   )
 };
 
-export const addBug = () => apiRequestBegan (
+export const addBugs = () => apiRequestBegan (
   {
-    url: '/bugs',
+    url,
     method: 'post',
     data:{description: 'a'},
     onSuccess: bugAdded.type,
+  }
+)
+
+export const resolveBugs = (id) => apiRequestBegan (
+  {
+    url: url + '/' + id,
+    method: 'patch',
+    data:{resolved: 'true'},
+    onSuccess: bugResolved.type,
+  }
+)
+export const assignBugToUser = (bugId,userId) => apiRequestBegan (
+  {
+    url: url + '/' + bugId,
+    method: 'patch',
+    data:{userId: userId},
+    onSuccess: bugAssignToUser.type,
   }
 )
 
