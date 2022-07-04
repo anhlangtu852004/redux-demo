@@ -1,7 +1,9 @@
 // import { createAction,createReducer } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { createSlice } from '@reduxjs/toolkit';
-import { apiRequestBegan } from './apiAction'
+import { apiRequestBegan } from './apiAction';
+import moment from 'moment';
+
 
 let lastId = 0;
 
@@ -21,7 +23,9 @@ const slice = createSlice({
     },
     bugsReceived: (bugs, action) => {
       bugs.list = action.payload;
-      bugs.loading = false
+      bugs.loading = false;
+      bugs.lastFetch = Date.now()
+
     },
     bugAdded: (bugs, action) => {
       bugs.list.push ({
@@ -49,28 +53,43 @@ export default slice.reducer;
 export const { bugAdded, bugResolved, bugAssignToUser, bugsReceived, bugsRequested, bugRequestFail } =  slice.actions
 
 
-export const loadBugs = () => apiRequestBegan (
-    {
-      url: '/bugs',
-      method: 'get',
-      data:{},
-      onSeccess: bugsReceived.type,
-      onStart: bugsRequested.type,
-      onError: bugRequestFail.type
-    }
+export const loadBugs = () => (dispatch, getState) => {
+  const { lastFetch } =  getState().entities.bugs
+  console.log(lastFetch)
+
+  const diffInMinutes = moment().diff(moment(lastFetch),'minutes')
+  if (diffInMinutes < 10){
+    return
+  }
+
+  dispatch(
+    apiRequestBegan (
+      {
+        url: '/bugs',
+        method: 'get',
+        data:{},
+        onSuccess: bugsReceived.type,
+        onStart: bugsRequested.type,
+        onError: bugRequestFail.type
+      }
+    )
   )
+};
+
+
+
 
 
 //createSelector
 // export const getUnresolvedBugs = state => state.entities.bugs.filter( bug => !bug.resolve)
 export const getUnresolvedBugs =  createSelector (
-  state => state.entities.bugs,
+  state => state.entities.bugs.list,
   state => state.entities.projects,
   (bugs, projects) => bugs.filter (bug => !bug.resolve) 
 )
 
 export const getBugAssignToUser = userId =>  createSelector (
-  state => state.entities.bugs,
+  state => state.entities.bugs.list,
   bugs => bugs.filter(bug => bug.userId === userId )
   
 )

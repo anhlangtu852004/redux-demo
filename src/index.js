@@ -20,10 +20,12 @@ store.subscribe( () => {
 
 store.dispatch(loadBugs())
 
+setTimeout(() => store.dispatch(loadBugs()),2000)
+
 
 
 //project
-store.dispatch(projectAdded({name: 'Project 1'}));
+// store.dispatch(projectAdded({name: 'Project 1'}));
 
 //bugs
 // store.dispatch(bugAdded({ description:'bug2' }));
