@@ -1,10 +1,9 @@
 import './App.css';
+import Bugs from './components/bugs';
 
 function App() {
   return (
-    <div className="App">
-      np
-    </div>
+    <Bugs />
   );
 }
 
